@@ -29,9 +29,9 @@
  
 (defn result-frequencies
  [results]
-  (->> results
-       (map :result)
-       (frequencies)))
+ (->> results
+      (map :result)
+      (frequencies)))
  
 
 (defn mece
@@ -94,8 +94,7 @@
  
  
 (defn -main []
-  (let [
-        log-file "/var/log/authlog"
+  (let [log-file "/var/log/authlog"
         logs (get-logs log-file)
         rules-file "sample.regex"
         rules (get-rules rules-file)]
@@ -107,4 +106,4 @@
       [{:paths [rules-file]
         :handler (fn [ctx e]
                    (time (process (get-rules rules-file) logs))
-                ctx)}])))
+                  ctx)}])))
