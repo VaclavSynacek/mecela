@@ -1,0 +1,4 @@
+sshd-related .*sshd.*
+log-rotation turned over
+local-su su:
+repeated message repeated
