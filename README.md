@@ -25,9 +25,9 @@ You have your log file to analyze (say `/var/log/authlog` for this example).
 You create file that will hold your regex rules (say `sample.regex` for
 example, but any name will do)
 
-Run `mecela -l /var/log/authlog -r sample.regex`.
+Run `java -jar mecela.jar -l /var/log/authlog -r sample.regex`.
 
-Now in different terminal open sample.regex, add another line or change an
+Now in different terminal in your favourite editor open sample.regex, add another line or change an
 existing one and save.
 
 In a few msec to a few minutes you should see the new results in the first
@@ -35,7 +35,7 @@ terminal running mecela.
 
 Repeat until mecela writes your rules are
 [MECE](https://en.wikipedia.org/wiki/MECE_principle). Now you can be sure you have
-categorized all lines in the log file to your patterns. and hopefully your
+categorized all lines in the log file to your patterns. And hopefully your
 undestanding of the legacy system is much greater than when you started.
 
 ### Format of regex file
@@ -47,3 +47,10 @@ Anything after the first space till the end of line is regex to be searched in
 the log file. It can be as simple as an arbitrary string from the log (so long
 as it does  not contain any `\`, `(` or `{`) or it can be any
 [Java style regex](https://docs.oracle.com/javase/10/docs/api/java/util/regex/Pattern.html).
+
+
+## Install
+
+Just grab the `mecela.jar` and run it on any decent JVM.
+Alternatively if you have clojure and lein installed, `git clone` this repo and `lein
+run` from inside the folder.
