@@ -19,7 +19,7 @@
        (case (count results)
          0 {:result :unmatched :source s}
          1 {:result :matched :group (first results) :source s}
-         {:result :overmatched :source s :error (str "ERROR: " (str/join "-" results))})))
+         {:result :overmatched :source s :error (str "Overmatched by these rules: " (str/join "-" results))})))
  
 
 (defn classify
@@ -43,12 +43,12 @@
           :mece)))
 
 
-(defn colorful-mece-result
+(defn pretty-format-result
   [mr]
   (case mr
-    :not-exhaustive (color/white :not-exhaustive)
-    :mece (color/green :mece)
-    :overlapping (color/red :overlapping)))
+    :not-exhaustive (color/white "regex rules are not exclusive, some logs are still unmatched")
+    :mece (color/green "regex rules are MECE (Mutually Exclusive, Collectively Exhaustive)")
+    :overlapping (color/red "regex rules are overlapping, some logs are matched by more than one regex")))
  
  
 (defn unmatched-head
@@ -85,7 +85,7 @@
   (let [classified (classify rules logs)
         result-frequencies (result-frequencies classified)
         matched-frequencies (matched-frequencies classified)]
-       (println (color/blue "Mece Result: " (colorful-mece-result (mece result-frequencies))))
+       (println (color/blue "Result: " (pretty-format-result (mece result-frequencies))))
        (doall (map println result-frequencies))
        (println (color/blue "frequencies of matched ------------------------"))
        (doall (map println matched-frequencies))
@@ -98,7 +98,7 @@
         logs (get-logs log-file)
         rules-file "sample.regex"
         rules (get-rules rules-file)]
-    (println "Mutually Exclusive Commonly Exhaustive Log Analyser")
+    (println "Mutually Exclusive Collectively Exhaustive Log Analyser")
     (println "analyzing log " log-file " with regex definitions in " rules-file)
     (println "update the definitions and save to rerun analysis")
     (process rules logs)
