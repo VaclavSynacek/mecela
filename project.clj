@@ -3,7 +3,7 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [hawk "0.2.11"]
                  [jansi-clj "0.1.1"]
-                 [iota "1.1.3"]]
+                 [org.clojure/tools.cli "0.4.1"]]
 ;  :aot :all
   :main mecela.core)
  

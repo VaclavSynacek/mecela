@@ -3,8 +3,7 @@
             [clojure.string :as str]
             [hawk.core :as hawk]
             [jansi-clj.core :as color]
-            [iota :as io]
-            [clojure.core.reducers :as r])
+            [clojure.tools.cli :as cli])
   (:gen-class))
  
  
@@ -91,12 +90,11 @@
        (doall (map println matched-frequencies))
        (println (color/blue "Unmatched HEAD --------------------------------"))
        (doall (map println (unmatched-head classified)))))
- 
- 
-(defn -main []
-  (let [log-file "/var/log/authlog"
-        logs (get-logs log-file)
-        rules-file "sample.regex"
+
+  
+(defn start
+  [log-file rules-file]
+  (let [logs (get-logs log-file)
         rules (get-rules rules-file)]
     (println "Mutually Exclusive Collectively Exhaustive Log Analyser")
     (println "analyzing log " log-file " with regex definitions in " rules-file)
@@ -107,3 +105,19 @@
         :handler (fn [ctx e]
                    (time (process (get-rules rules-file) logs))
                   ctx)}])))
+
+(def cli-options
+  [["-l" "--log FILE" "Log File to analyze"]
+   ["-r" "--regex FILE" "File with regex group definitions"]
+   ["-h" "--help"]])
+
+ 
+(defn -main [& args]
+  (let [{:keys [options arguments errors summary]}
+        (cli/parse-opts args cli-options)]
+    (if (or (:help options) (not (:log options)) (not (:regex options)))
+      (do (println "Mutually Exclusive Collectively Exhaustive Log Analyser")
+          (println "Usage is: ")
+          (println summary)
+          (println "Example: java -jar mecela.jar -l /var/log/authlog -r sample.regex"))
+      (start (:log options) (:regex options)))))
